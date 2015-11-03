@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+
+    <properties>
+        <property name="basePath">${sys:catalina.home}/logs/pdk-chat</property>
+    </properties>
+
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout charset="UTF-8" pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <RollingFile name="InfoLog" fileName="${basePath}/pdk-chat.log"
+                     filePattern="${basePath}/pdk-chat.%d{yyyy-MM-dd-HH}.log">
+            <PatternLayout charset="UTF-8" pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file:%line] - %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="ChatLog" fileName="${basePath}/chat.log"
+                     filePattern="${basePath}/chat.%d{yyyy-MM-dd-HH}.log">
+            <PatternLayout charset="UTF-8" pattern="%msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="WXLog" fileName="${basePath}/wx.log"
+                     filePattern="${basePath}/wx.%d{yyyy-MM-dd-HH}.log">
+            <PatternLayout charset="UTF-8" pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file:%line] - %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="Send2WXLog" fileName="${basePath}/send2wx.log"
+                     filePattern="${basePath}/send2wx.%d{yyyy-MM-dd-HH}.log">
+            <PatternLayout charset="UTF-8" pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file:%line] - %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="mongodb_cluster" fileName="${basePath}/mongodb_cluster.log"
+                     filePattern="${basePath}/mongodb_cluster.%d{yyyy-MM-dd-HH}.log">
+            <PatternLayout charset="UTF-8" pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file:%line] - %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+        </RollingFile>
+
+    </appenders>
+    <loggers>
+        <root level="debug">
+            <appender-ref ref="InfoLog"/>
+            <appender-ref ref="Console"/>
+        </root>
+
+        <logger name="com.pdk.chat.websocket.chat" level="debug" additivity="false">
+            <appender-ref ref="ChatLog"/>
+        </logger>
+
+        <logger name="com.pdk.chat.wx" level="debug" additivity="false">
+            <appender-ref ref="WXLog"/>
+        </logger>
+
+        <logger name="com.pdk.chat.send2wx" level="debug" additivity="false">
+            <appender-ref ref="Send2WXLog"/>
+        </logger>
+
+        <logger name="org.mongodb.driver.cluster" level="info" additivity="false">
+            <appender-ref ref="mongodb_cluster"/>
+        </logger>
+
+    </loggers>
+</configuration>

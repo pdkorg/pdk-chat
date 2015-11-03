@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/util
+          http://www.springframework.org/schema/util/spring-util-3.0.xsd
+          http://www.springframework.org/schema/data/mongo
+          http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <util:properties id="mongodb" location="classpath:mongo.properties"/>
+
+    <mongo:mongo-client id="mongo" host="#{mongodb['mongo.host']}" port="#{mongodb['mongo.port']}" credentials="#{mongodb['mongo.username']}:#{mongodb['mongo.password']}@#{mongodb['mongo.dbname']}">
+        <mongo:client-options write-concern="NORMAL"
+                              connections-per-host="#{mongodb['mongo.connectionsPerHost']}"
+                              threads-allowed-to-block-for-connection-multiplier="#{mongodb['mongo.threadsAllowedToBlockForConnectionMultiplier']}"
+                              connect-timeout="#{mongodb['mongo.connectTimeout']}"
+                              max-wait-time="#{mongodb['mongo.maxWaitTime']}"
+                              socket-keep-alive="#{mongodb['mongo.socketKeepAlive']}"
+                              socket-timeout="#{mongodb['mongo.socketTimeout']}"/>
+    </mongo:mongo-client>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg index="0" name="mongo" ref="mongo"/>
+        <constructor-arg index="1" name="databaseName" value="#{mongodb['mongo.dbname']}"/>
+    </bean>
+
+</beans>
